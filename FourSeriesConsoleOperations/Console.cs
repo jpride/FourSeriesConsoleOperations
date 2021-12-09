@@ -4,11 +4,12 @@ using System.Linq;
 
 
 
+
 namespace FourSeriesConsoleOperations
 {
     public class ConsoleInterface
     {
-        private string ConsoleRsp;
+        public string ConsoleRsp;
         /// <summary>
         /// Performs an Ethernet Autodiscovery on the defined adapter
         /// </summary>
@@ -81,24 +82,45 @@ namespace FourSeriesConsoleOperations
         {
             string[] rspLines;
 
-            if (CrestronConsole.SendControlSystemCommand(cmd, ref ConsoleRsp))
+            try
             {
-                //this is just a way to see the response line by line.
-                rspLines = ConsoleRsp.Split('\n');
-                foreach (var line in rspLines)
+
+                if (CrestronConsole.SendControlSystemCommand(cmd, ref ConsoleRsp))
                 {
-                    CrestronConsole.PrintLine(line);
+
+                    ConsoleRspEventArgs args = new ConsoleRspEventArgs();
+                    args.Response = ConsoleRsp;
+                    
+                    //a way to see the response line by line.
+                    rspLines = ConsoleRsp.Split('\n');
+
+                    //initialize array
+                    args.ResponseList = new string[rspLines.Length];
+
+                    //args.ResponseList.Initialize();
+                    if (args.ResponseList.Length > 0)
+                    {
+                        int i = 0;
+                        foreach (var line in rspLines)
+                        {
+                            args.ResponseList[i] = line;
+                            CrestronConsole.PrintLine(line);
+                            i++;
+                        }
+
+                        args.ResponseListCount = (ushort)args.ResponseList.Length;
+                    }
+                    
+                    if (!ConsoleRspEventCall.Equals(null))
+                    {
+                        ConsoleRspEventCall(this, args);
+                    }
+
                 }
-                
-
-                ConsoleRspEventArgs args = new ConsoleRspEventArgs();
-                args.Response = ConsoleRsp;
-
-                if (!ConsoleRspEventCall.Equals(null))
-                {
-                    ConsoleRspEventCall(this, args);
-                }
-
+            }
+            catch (Exception e)
+            {
+                CrestronConsole.PrintLine("Error in SendCustomConsoleCmd: {0}",e.Message);
             }
 
         }

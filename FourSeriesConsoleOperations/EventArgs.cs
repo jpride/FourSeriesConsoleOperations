@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FourSeriesConsoleOperations
 {
@@ -11,7 +12,9 @@ namespace FourSeriesConsoleOperations
     }
 
     public class ConsoleRspEventArgs : EventArgs
-    { 
+    {
         public string Response { get; set; }
+        public string[] ResponseList {get; set;}
+        public ushort ResponseListCount { get; set; }
     }
 }
