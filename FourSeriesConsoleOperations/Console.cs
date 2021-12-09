@@ -2,11 +2,13 @@
 using Crestron.SimplSharp;
 using System.Linq;
 
+
+
 namespace FourSeriesConsoleOperations
 {
     public class ConsoleInterface
     {
-        public string ConsoleRsp;
+        private string ConsoleRsp;
         /// <summary>
         /// Performs an Ethernet Autodiscovery on the defined adapter
         /// </summary>
@@ -87,7 +89,7 @@ namespace FourSeriesConsoleOperations
                 {
                     CrestronConsole.PrintLine(line);
                 }
-
+                
 
                 ConsoleRspEventArgs args = new ConsoleRspEventArgs();
                 args.Response = ConsoleRsp;
