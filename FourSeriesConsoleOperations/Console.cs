@@ -84,6 +84,7 @@ namespace FourSeriesConsoleOperations
 
             try
             {
+                cmd = cmd.Replace("\"","");
 
                 if (CrestronConsole.SendControlSystemCommand(cmd, ref ConsoleRsp))
                 {
